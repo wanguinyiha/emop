@@ -30,3 +30,12 @@ EOF
 - How I found the cause: read the error message from PostgreSQL naming the constraint
 - Fix: not needed, constraints worked as designed
 - What I learned: migrations run once each, in order, inside transactions; foreign keys and unique rules are enforced by the database itself
+
+## 2026-11-12: Users and causes tables (Phase 2)
+- AI wrote: 002_create_users.sql and 003_create_causes.sql (Claude chat); committed unmodified first
+- I wrote or changed myself: (fill in anything you changed)
+- I tested it by: ran migrate; inspected with \d users; tried 4 bad inserts (no contact details, invalid role, customer without location, duplicate email with different capitals) inside a transaction with savepoints, then rolled everything back
+- Error found: (write any real error you hit; if none: the database correctly refused all 4 bad rows, each naming the rule it broke)
+- How I found the cause: read the constraint name in the PostgreSQL error message
+- Fix: not needed, constraints worked as designed
+- What I learned: CHECK rules and unique indexes let the database refuse bad data even if the backend has a bug; never edit an applied migration
