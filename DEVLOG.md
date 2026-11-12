@@ -22,3 +22,11 @@
 - Other corrections: removed "towns it has" lists from the location tables, stored location as neighbourhood_id instead of text, store password_hash and never the password, removed stored duration in favour of started_at and restored_at
 - What I learned: ask "what is one row, what does it point to, what facts does it hold" instead of "who does it belong to"
 EOF
+## 2026-11-12: Migration runner and location tables (Phase 2)
+- AI wrote: migration runner (src/migrate.ts) and 001_create_locations.sql (Claude chat); committed unmodified first
+- I wrote or changed myself: (fill in anything you changed)
+- I tested it by: ran migrate twice (second run applied nothing), inspected tables with \dt and \d towns, inserted a town with a missing county, inserted a duplicate county inside a transaction and rolled it back
+- Error found: (write any real error you hit; if none, write: none, but the database correctly refused a town with a missing county and a duplicate county name)
+- How I found the cause: read the error message from PostgreSQL naming the constraint
+- Fix: not needed, constraints worked as designed
+- What I learned: migrations run once each, in order, inside transactions; foreign keys and unique rules are enforced by the database itself
