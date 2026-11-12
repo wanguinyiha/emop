@@ -39,3 +39,12 @@ EOF
 - How I found the cause: read the constraint name in the PostgreSQL error message
 - Fix: not needed, constraints worked as designed
 - What I learned: CHECK rules and unique indexes let the database refuse bad data even if the backend has a bug; never edit an applied migration
+
+## 2026-11-12: Outage incidents and reports tables (Phase 2)
+- AI wrote: 004_create_outage_incidents.sql and 005_create_outage_reports.sql (Claude chat); committed unmodified first
+- I wrote or changed myself: (fill in anything you changed)
+- I tested it by: ran migrate; inspected with \d; tried 6 cases inside a transaction with savepoints (invalid status, restored without a time, restored before start, report pointing at a missing incident, two users reporting one incident, same user reporting twice), then rolled everything back
+- Error found: (write any real error you hit; if none: the database correctly refused all bad rows, each naming the rule it broke)
+- How I found the cause: read the constraint name in the PostgreSQL error message
+- Fix: not needed, constraints worked as designed
+- What I learned: the foreign key goes on the "many" side (reports point to the incident); two columns that describe one fact (status and restored_at) can be tied together with a CHECK so they never disagree; time-dependent rules belong in the backend
