@@ -8,3 +8,17 @@
 - How I found the cause: read the message; no route was defined for "/"
 - Fix: not a bug. Optionally added a GET "/" route that returns a status message
 - What I learned: Express only answers routes you define, and a missing route gives "Cannot GET"
+
+
+
+
+## 2026-11-12: Database design on paper (Phase 1)
+- AI wrote: the final text of docs/design.md, the Mermaid diagram and the grouping rule wording (Claude chat), after I did my own first drafts
+- I wrote or changed myself: first drafts of the users, location, reports and incidents tables
+- I tested it by: reading the design against the project document (can every feature be stored? can the questions in the document be answered?)
+- Error found: my first reports/incidents design put the foreign key on the incident side, so one incident could link to only one report
+- How I found the cause: I noticed 30 reports from one area could not all share one incident, then reasoned that a column holds one value per row
+- Fix: moved the foreign key to the reports table (incident_id), because the "many" side holds the key
+- Other corrections: removed "towns it has" lists from the location tables, stored location as neighbourhood_id instead of text, store password_hash and never the password, removed stored duration in favour of started_at and restored_at
+- What I learned: ask "what is one row, what does it point to, what facts does it hold" instead of "who does it belong to"
+EOF
