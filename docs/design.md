@@ -174,7 +174,7 @@ EOF
 
 
 
-
+A migration is a numbered SQL file that changes the database one step at a time.
 
 
 
