@@ -48,3 +48,12 @@ EOF
 - How I found the cause: read the constraint name in the PostgreSQL error message
 - Fix: not needed, constraints worked as designed
 - What I learned: the foreign key goes on the "many" side (reports point to the incident); two columns that describe one fact (status and restored_at) can be tied together with a CHECK so they never disagree; time-dependent rules belong in the backend
+
+## 2026-11-12: Notifications, planned interruptions, weather, predictions (Phase 2, database complete)
+- AI wrote: migrations 006 to 009 (Claude chat); committed unmodified first
+- I wrote or changed myself: (fill in anything you changed)
+- I tested it by: ran migrate; inspected with \dt and \d; ran 9 test cases in a transaction with savepoints (invalid notification type, restored message without incident, allowed planned message without incident, reversed planned window, negative rainfall, missing is_simulated, invalid confidence, reversed risk window, two predictions kept for one incident), then rolled everything back
+- Error found: while writing the migrations, a contradiction in the design: planned_interruptions pointed at causes, but causes excludes planned maintenance. Also notifications needed an optional incident_id for planned and risk messages
+- How I found the cause: compared the design document against the project requirements while turning it into SQL
+- Fix: replaced cause_id with a text reason; made incident_id optional with a CHECK for the types that need it; recorded both changes in docs/design.md
+- What I learned: a design on paper can contain mistakes that only show when it becomes real tables, so the design document must be updated with the database; a column with no default forces the writer to decide (is_simulated)

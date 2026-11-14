@@ -195,3 +195,8 @@ A migration is a numbered SQL file that changes the database one step at a time.
 
 
 
+
+## Design changes made while building (Phase 2)
+- planned_interruptions: replaced `cause_id` with a text `reason`. Reason: the causes list deliberately excludes "planned maintenance", so a planned job could not pick a valid cause.
+- notifications: `incident_id` is optional, but required unless the type is `planned_interruption` or `risk_warning`. Reason: those two messages have no incident.
+- weather_records: `wind_speed` renamed `wind_speed_kmh` so the unit is in the name. `is_simulated` has no default, so the writer must always say whether data is real or simulated.
