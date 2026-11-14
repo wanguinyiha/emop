@@ -57,3 +57,12 @@ EOF
 - How I found the cause: compared the design document against the project requirements while turning it into SQL
 - Fix: replaced cause_id with a text reason; made incident_id optional with a CHECK for the types that need it; recorded both changes in docs/design.md
 - What I learned: a design on paper can contain mistakes that only show when it becomes real tables, so the design document must be updated with the database; a column with no default forces the writer to decide (is_simulated)
+
+## 2026-11-12: Seeding and the is_simulated gap (Phase 2 finished)
+- AI wrote: migration 010, the seed runner, 001_locations.sql and 002_simulated_data.sql (Claude chat); committed unmodified first
+- I wrote or changed myself: (fill in anything you changed, for example your own location names)
+- I tested it by: ran both seeds twice and checked the counts did not double (8 neighbourhoods, 6 incidents); ran a grouping query (3 reports under one open incident); calculated outage durations from started_at and restored_at; tried to insert an incident without is_simulated
+- Error found: the design said simulated data must be identifiable, but only weather_records had is_simulated, so simulated incidents could not be told apart from real ones
+- How I found the cause: checked the seed plan against the requirement in the project document before running it
+- Fix: migration 010 adds is_simulated to outage_incidents with no default; the simulated seed deletes only marked rows before re-creating them
+- What I learned: seeds should be safe to run twice (ON CONFLICT, delete then insert); marking simulated data protects real data and stops fake data from passing as real

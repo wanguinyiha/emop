@@ -200,3 +200,10 @@ A migration is a numbered SQL file that changes the database one step at a time.
 - planned_interruptions: replaced `cause_id` with a text `reason`. Reason: the causes list deliberately excludes "planned maintenance", so a planned job could not pick a valid cause.
 - notifications: `incident_id` is optional, but required unless the type is `planned_interruption` or `risk_warning`. Reason: those two messages have no incident.
 - weather_records: `wind_speed` renamed `wind_speed_kmh` so the unit is in the name. `is_simulated` has no default, so the writer must always say whether data is real or simulated.
+
+## Simulated data (Phase 2)
+- `outage_incidents.is_simulated` was added in migration 010, with no default, so the writer must always state whether an incident is simulated.
+- Simulated users use emails ending in `@simulated.emop.test` and a deliberately invalid password hash, so nobody can log in as them.
+- Simulated reports are identified through their incident. Simulated messages and reasons start with the word SIMULATED.
+- `seeds/001_locations.sql` holds sample location names for development and must be replaced with a verified list before real use.
+- `seeds/002_simulated_data.sql` deletes and re-creates all simulated rows, so it can be run again at any time. Real data is never touched.
