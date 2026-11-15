@@ -66,3 +66,12 @@ EOF
 - How I found the cause: checked the seed plan against the requirement in the project document before running it
 - Fix: migration 010 adds is_simulated to outage_incidents with no default; the simulated seed deletes only marked rows before re-creating them
 - What I learned: seeds should be safe to run twice (ON CONFLICT, delete then insert); marking simulated data protects real data and stops fake data from passing as real
+
+## 2026-11-14: Registration and login (Phase 3)
+- AI wrote: all auth routes, middleware and locations route (OpenCode, from docs/tasks/001-auth.md); committed unmodified first. I wrote: the spec, the JWT secret
+- I wrote or changed myself: (fill in what you changed)
+- I tested it by: 9 curl checks (valid register, duplicate email with different capitals, role injection attempt, weak password, me with and without cookie, wrong password vs unknown email, login/logout, rate limit) and a database check that only an argon2id hash is stored
+- Error found: (write any real bug or surprise from your review or tests; if none, write what you checked in the review that gave you confidence)
+- How I found the cause: (command, output you got, output you expected)
+- Fix: (what changed and why it works)
+- What I learned: tokens in httpOnly cookies, hashing vs storing passwords, why login must give identical errors, why the backend validates everything itself
