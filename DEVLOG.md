@@ -75,3 +75,13 @@ EOF
 - How I found the cause: (command, output you got, output you expected)
 - Fix: (what changed and why it works)
 - What I learned: tokens in httpOnly cookies, hashing vs storing passwords, why login must give identical errors, why the backend validates everything itself
+
+## 2026-11-15: Outage reports and grouping (Phase 3)
+- AI wrote: reports and incidents routes (OpenCode, from docs/tasks/002-reports.md); committed unmodified first. I wrote: the spec, and my own version of the grouping SQL in psql before the AI's code existed
+- I wrote or changed myself: (fill in what you changed)
+- I tested it by: new incident, neighbour joining it, same user twice, privacy of the incidents list, 6 invalid inputs, two simultaneous reports, simulated vs real incidents, my own reports, and a database count of open real incidents per neighbourhood
+- Error found: many test commands printed nothing and the first report test returned 401. The cause was in my test setup, not the server code: (fill in what you found, for example typed letters instead of numbers, cookie files in another folder, the server stopped, or silent curl output)
+- How I found the cause: checked the response size, tested /health without the silent flag, queried the database to see what had really been saved, and found my first explanation was incomplete
+- Fix: shell variables for ids, an api helper that always prints the status, separate terminals for the server and for tests, cookie files in a scratch folder outside the repo
+- Second finding: the rate limiter counts every request, even rejected ones, so I restarted the server between test groups
+- What I learned: race conditions and advisory locks; why a transaction needs one client and not pool.query; why grouping must exclude simulated data; why a silent test tool hides failures
